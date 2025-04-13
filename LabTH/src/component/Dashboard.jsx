@@ -1,6 +1,63 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+// import axios from "axios";
 
 // Main Dashboard Layout
+// Overview Component
+import ShoppingCart from "../assets/Button 1509.png";
+import DollarSign from "../assets/Button 1529.png";
+import UserPlus from "../assets/Button 1530.png";
+import square from "../assets/Squares four 1.png";
+function Overview() {
+  const [items, setItems] = useState([]);
+  const iconMap = {
+    cart: <img src={ShoppingCart} alt="Cart" className="w-6 h-6" />,
+    dollar: <img src={DollarSign} alt="Dollar" className="w-6 h-6" />,
+    user: <img src={UserPlus} alt="User" className="w-6 h-6" />,
+  };
+
+  useEffect(() => {
+    fetch("http://localhost:3001/overview")
+      .then((res) => res.json())
+      .then((data) => setItems(data));
+  }, []);
+
+  return (
+    <div className="p-4">
+      <img src={square} alt="" />
+      <h2 className="text-xl font-semibold mb-4">Overview</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {items.map((item) => {
+          let bgColor = "bg-white text-black";
+          const title = item.title?.toLowerCase();
+          if (title.includes("turnover")) bgColor = "bg-pink-500 text-white";
+          else if (title.includes("profit")) bgColor = "bg-green-500 text-white";
+          else if (title.includes("customer")) bgColor = "bg-blue-100 text-blue-900";
+
+          return (
+            <div key={item.id} className={`rounded-2xl p-4 shadow-sm border ${bgColor}`}>
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm">{item.title}</p>
+                  <h3 className="text-2xl font-bold">
+                    {item.unit}
+                    {item.value.toLocaleString()}
+                  </h3>
+                  <p className="text-sm mt-1">{item.change}% period of change</p>
+                </div>
+                <div className="p-2 bg-white rounded-full">
+                  {iconMap[item.icon?.toLowerCase()]}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const baseClass = "px-4 py-2 text-left rounded-xl";
 
@@ -47,6 +104,8 @@ export default function Dashboard() {
 
         {/* Placeholder for Main Content */}
         <div className="bg-white rounded-xl shadow p-4">
+        <Overview />
+
           <p className="text-gray-700">Main content goes here...</p>
         </div>
       </main>
