@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import Avatar from "../assets/Avatar 313.png";
 import Avatar1 from "../assets/Avatar (1).png";
@@ -6,6 +7,11 @@ import Avatar2 from "../assets/Avatar (2).png";
 import Avatar3 from "../assets/Avatar (3).png";
 import Avatar4 from "../assets/Avatar (4).png";
 import Avatar5 from "../assets/Avatar (5).png";
+import create from "../assets/create.png";
+// import search from "../assets/Search.png";
+
+
+
 // Assets
 import ShoppingCart from "../assets/Button 1509.png";
 import DollarSign from "../assets/Button 1529.png";
@@ -36,6 +42,7 @@ function Overview() {
 
   return (
     <div className="p-4">
+      
       <h2 className="text-xl font-semibold mb-4">Overview</h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {items.map((item) => {
@@ -70,20 +77,21 @@ function Overview() {
 
 // Main Dashboard
 export default function Dashboard() {
+  const baseClass = "px-4 py-2 text-left rounded-xl";
   const [data, setData] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null); // State để lưu dữ liệu của order được chọn
-  const [isModalOpen, setIsModalOpen] = useState(false); // State để điều khiển Modal chỉnh sửa
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // State để điều khiển Modal thêm user
+  const [selectedOrder, setSelectedOrder] = useState(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); 
   const [newUser, setNewUser] = useState({
     name: "",
     company: "",
     value: "",
     date: "",
     status: "New",
-    avatar: "Avatar 313.png", // Default avatar
+    avatar: "Avatar 313.png", 
   });
-  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-  const [itemsPerPage] = useState(5); // Số lượng item trên mỗi trang
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [itemsPerPage] = useState(5); 
 
   useEffect(() => {
     axios
@@ -103,34 +111,35 @@ export default function Dashboard() {
   };
 
   const handleEditClick = (order) => {
-    setSelectedOrder(order); // Lưu dữ liệu của order được chọn
-    setIsModalOpen(true); // Mở Modal
+    setSelectedOrder(order); 
+    setIsModalOpen(true); 
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Đóng Modal
-    setSelectedOrder(null); // Xóa dữ liệu của order được chọn
+    setIsModalOpen(false); 
+    setSelectedOrder(null); 
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSelectedOrder((prevOrder) => ({
       ...prevOrder,
-      [name]: value, // Cập nhật giá trị của trường được chỉnh sửa
+      [name]: value, 
     }));
   };
 
   const handleSave = () => {
     if (selectedOrder) {
       axios
-        .put(`http://localhost:3003/orders/${selectedOrder.id}`, selectedOrder) // Gọi API PUT để cập nhật order
+        .put(`http://localhost:3003/orders/${selectedOrder.id}`, selectedOrder) 
         .then((res) => {
           setData((prevData) =>
             prevData.map((item) =>
               item.id === selectedOrder.id ? res.data : item
             )
           );
-          closeModal(); // Đóng Modal
+          closeModal(); 
+          alert("Lưu thành công!"); 
         })
         .catch((err) => {
           console.error("Error updating order:", err);
@@ -149,19 +158,19 @@ export default function Dashboard() {
 
   const handleAddUser = () => {
     axios
-      .post("http://localhost:3003/orders", newUser) // Gọi API POST để thêm user
+      .post("http://localhost:3003/orders", newUser) 
       .then((res) => {
-        setData((prevData) => [...prevData, res.data]); // Thêm user mới vào danh sách
-        alert("Thêm thành công!"); // Hiển thị thông báo thành công
-        setIsAddModalOpen(false); // Đóng Modal
+        setData((prevData) => [...prevData, res.data]); 
+        setIsAddModalOpen(false); 
         setNewUser({
           name: "",
           company: "",
           value: "",
           date: "",
           status: "New",
-          avatar: "Avatar 313.png", // Reset form
+          avatar: "Avatar 313.png", 
         });
+        alert("Thêm thành công!"); 
       })
       .catch((err) => {
         console.error("Error adding user:", err);
@@ -175,16 +184,78 @@ export default function Dashboard() {
       <aside className="bg-white p-4 flex flex-col gap-4 shadow">
         <div className="text-2xl font-bold mb-6 text-pink-600">Logo</div>
         <nav className="flex flex-col gap-3">
-          <button className="bg-pink-500 text-white rounded-xl px-4 py-2 text-left">Dashboard</button>
-          <button className="hover:text-pink-600">Projects</button>
-          <button className="hover:text-pink-600">Teams</button>
-          <button className="hover:text-pink-600">Analytics</button>
-          <button className="hover:text-pink-600">Messages</button>
-          <button className="hover:text-pink-600">Integrations</button>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `${baseClass} flex items-center gap-3 ${
+                isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"
+              }`
+            }
+          >
+            
+            Dashboard
+          </NavLink>
+          <NavLink
+            to="/projects"
+            className={({ isActive }) =>
+              `${baseClass} flex items-center gap-3 ${
+                isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"
+              }`
+            }
+          >
+            
+            Projects
+          </NavLink>
+          <NavLink
+            to="/teams"
+            className={({ isActive }) =>
+              `${baseClass} flex items-center gap-3 ${
+                isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"
+              }`
+            }
+          >
+            
+            Teams
+          </NavLink>
+          <NavLink
+            to="/analytics"
+            className={({ isActive }) =>
+              `${baseClass} flex items-center gap-3 ${
+                isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"
+              }`
+            }
+          >
+            
+            Analytics
+          </NavLink>
+          <NavLink
+            to="/messages"
+            className={({ isActive }) =>
+              `${baseClass} flex items-center gap-3 ${
+                isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"
+              }`
+            }
+          >
+            
+            Messages
+          </NavLink>
+          <NavLink
+            to="/integrations"
+            className={({ isActive }) =>
+              `${baseClass} flex items-center gap-3 ${
+                isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"
+              }`
+            }
+          >
+            
+            Integrations
+          </NavLink>
         </nav>
         <div className="mt-auto bg-indigo-100 p-3 rounded-xl text-center">
-          <p className="font-semibold mb-2">V2.0 is available</p>
-          <button className="bg-blue-600 text-white px-3 py-1 rounded-full">Try now</button>
+          
+          <button className="bg-blue-600 text-white px-3 py-1 rounded-full">
+            Try now
+          </button>
         </div>
       </aside>
 
@@ -194,29 +265,17 @@ export default function Dashboard() {
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-bold text-pink-600">Dashboard</h1>
           <div className="flex gap-4 items-center">
-          <button
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-5 py-2 rounded-xl shadow-md hover:shadow-lg transition duration-300"
-            onClick={() => setIsAddModalOpen(true)}
-          >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-          <path
-            fillRule="evenodd"
-            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clipRule="evenodd"
-          />
+          <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-5 py-2 rounded-xl shadow-md hover:shadow-lg transition duration-300" onClick={() => setIsAddModalOpen(true)}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"/>
           </svg>
-            Add User
+          Add User
           </button>
 
             <input type="text" placeholder="Search..." className="border rounded-lg px-3 py-1" />
-            <span className="material-icons text-gray-600">notifications</span>
-            <span className="material-icons text-gray-600">help_outline</span>
-            <img src="https://i.pravatar.cc/32" alt="avatar" className="rounded-full w-8 h-8" />
+            
+            
+            <img src={Avatar} alt="avatar" className="rounded-full w-8 h-8" />
           </div>
         </div>
 
@@ -267,12 +326,12 @@ export default function Dashboard() {
                     </span>
                   </td>
                   <td>
-                    <span
-                      className="material-icons text-gray-400 cursor-pointer"
+                    <img
+                      src={create}
+                      alt="Edit"
+                      className="w-6 h-6 cursor-pointer"
                       onClick={() => handleEditClick(row)} // Gọi hàm khi nhấn nút "Edit"
-                    >
-                      edit
-                    </span>
+                    />
                   </td>
                 </tr>
               ))}
@@ -477,13 +536,13 @@ export default function Dashboard() {
               <div className="mt-4 flex justify-end gap-2">
                 <button
                   className="bg-gray-300 px-4 py-2 rounded"
-                  onClick={() => setIsAddModalOpen(false)} // Đóng Modal
+                  onClick={() => setIsAddModalOpen(false)}
                 >
                   Cancel
                 </button>
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded"
-                  onClick={handleAddUser} // Gọi hàm thêm user
+                  onClick={handleAddUser} 
                 >
                   Save
                 </button>
