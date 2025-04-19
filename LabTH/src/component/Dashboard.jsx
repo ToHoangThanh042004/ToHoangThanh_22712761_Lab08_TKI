@@ -1,21 +1,32 @@
-
 import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-// import axios from "axios";
-
-// Main Dashboard Layout
-// Overview Component
+import axios from "axios";
+import Avatar from "../assets/Avatar 313.png";
+import Avatar1 from "../assets/Avatar (1).png";
+import Avatar2 from "../assets/Avatar (2).png";
+import Avatar3 from "../assets/Avatar (3).png";
+import Avatar4 from "../assets/Avatar (4).png";
+import Avatar5 from "../assets/Avatar (5).png";
+// Assets
 import ShoppingCart from "../assets/Button 1509.png";
 import DollarSign from "../assets/Button 1529.png";
 import UserPlus from "../assets/Button 1530.png";
-import square from "../assets/Squares four 1.png";
+const images = {
+            "Avatar 313.png" : Avatar,
+            "Avatar (1).png"  : Avatar1,
+            "Avatar (2).png" : Avatar2,
+            "Avatar (3).png" : Avatar3,
+            "Avatar (4).png" : Avatar4,
+            "Avatar (5).png" : Avatar5,
+        }
+const iconMap = {
+  cart: <img src={ShoppingCart} alt="Cart" className="w-6 h-6" />,
+  dollar: <img src={DollarSign} alt="Dollar" className="w-6 h-6" />,
+  user: <img src={UserPlus} alt="User" className="w-6 h-6" />,
+};
+
+// Overview Component
 function Overview() {
   const [items, setItems] = useState([]);
-  const iconMap = {
-    cart: <img src={ShoppingCart} alt="Cart" className="w-6 h-6" />,
-    dollar: <img src={DollarSign} alt="Dollar" className="w-6 h-6" />,
-    user: <img src={UserPlus} alt="User" className="w-6 h-6" />,
-  };
 
   useEffect(() => {
     fetch("http://localhost:3001/overview")
@@ -25,7 +36,6 @@ function Overview() {
 
   return (
     <div className="p-4">
-      <img src={square} alt="" />
       <h2 className="text-xl font-semibold mb-4">Overview</h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {items.map((item) => {
@@ -58,8 +68,42 @@ function Overview() {
   );
 }
 
+// Main Dashboard
 export default function Dashboard() {
-  const baseClass = "px-4 py-2 text-left rounded-xl";
+  const [data, setData] = useState([]);
+
+  
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const [itemsPerPage] = useState(5); // Số lượng item trên mỗi trang
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3003/orders") // Đổi cổng thành 3003
+      .then((res) => setData(res.data))
+      .catch((err) => console.error("Error fetching orders:", err));
+  }, []);
+
+  // Tính toán dữ liệu hiển thị trên trang hiện tại
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Chuyển đổi trang
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-sm text-gray-700 grid grid-cols-[250px_1fr]">
@@ -67,24 +111,12 @@ export default function Dashboard() {
       <aside className="bg-white p-4 flex flex-col gap-4 shadow">
         <div className="text-2xl font-bold mb-6 text-pink-600">Logo</div>
         <nav className="flex flex-col gap-3">
-          <a href="/" className={`${baseClass} hover:text-pink-600`}>
-            Dashboard
-          </a>
-          <a href="/projects" className={`${baseClass} hover:text-pink-600`}>
-            Projects
-          </a>
-          <a href="/teams" className={`${baseClass} hover:text-pink-600`}>
-            Teams
-          </a>
-          <a href="/analytics" className={`${baseClass} hover:text-pink-600`}>
-            Analytics
-          </a>
-          <a href="/messages" className={`${baseClass} hover:text-pink-600`}>
-            Messages
-          </a>
-          <a href="/integrations" className={`${baseClass} hover:text-pink-600`}>
-            Integrations
-          </a>
+          <button className="bg-pink-500 text-white rounded-xl px-4 py-2 text-left">Dashboard</button>
+          <button className="hover:text-pink-600">Projects</button>
+          <button className="hover:text-pink-600">Teams</button>
+          <button className="hover:text-pink-600">Analytics</button>
+          <button className="hover:text-pink-600">Messages</button>
+          <button className="hover:text-pink-600">Integrations</button>
         </nav>
         <div className="mt-auto bg-indigo-100 p-3 rounded-xl text-center">
           <p className="font-semibold mb-2">V2.0 is available</p>
@@ -98,15 +130,22 @@ export default function Dashboard() {
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-bold text-pink-600">Dashboard</h1>
           <div className="flex gap-4 items-center">
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+              
+            >
+              Add User
+            </button>
             <input type="text" placeholder="Search..." className="border rounded-lg px-3 py-1" />
+            <span className="material-icons text-gray-600">notifications</span>
+            <span className="material-icons text-gray-600">help_outline</span>
+            <img src="https://i.pravatar.cc/32" alt="avatar" className="rounded-full w-8 h-8" />
           </div>
         </div>
 
-        {/* Placeholder for Main Content */}
-        <div className="bg-white rounded-xl shadow p-4">
+        {/* Overview */}
         <Overview />
 
-        {/* Report Table */}
         {/* Report Table */}
         <section className="bg-white rounded-xl shadow p-4 overflow-auto">
           <div className="flex justify-between items-center mb-4">
@@ -130,20 +169,64 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              
+              {currentItems.map((row, idx) => (
+                <tr key={idx} className="bg-white rounded-xl shadow">
+                  <td><input type="checkbox" /></td>
+                  <td className="flex items-center gap-2 font-medium">
+                    <img src={images[row.avatar]} alt={row.name} className="w-8 h-8 rounded-full" />
+                    {row.name}
+                  </td>
+
+                  <td>{row.company}</td>
+                  <td>{row.value}</td>
+                  <td>{row.date}</td>
+                  <td>
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      row.status === "New" ? "text-blue-600 bg-blue-100"
+                        : row.status === "In-progress" ? "text-yellow-600 bg-yellow-100"
+                        : "text-green-600 bg-green-100"
+                    }`}>
+                      {row.status}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      className="material-icons text-gray-400 cursor-pointer"
+                      
+                    >
+                      edit
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
           {/* Pagination */}
-          
+          <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
+            <p>{data.length} results</p>
+            <div className="flex gap-2">
+              {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                <button
+                  key={index + 1}
+                  className={`w-8 h-8 rounded-full ${
+                    currentPage === index + 1
+                      ? "bg-pink-500 text-white"
+                      : "text-gray-500 hover:text-pink-600 border border-gray-300"
+                  }`}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          </div>
         </section>
 
+        
 
-
-          <p className="text-gray-700">Main content goes here...</p>
-        </div>
+        
       </main>
     </div>
   );
 }
-// End of Dashboard Layout
