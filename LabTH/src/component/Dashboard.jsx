@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import Avatar from "../assets/Avatar 313.png";
 import Avatar1 from "../assets/Avatar (1).png";
@@ -9,7 +9,16 @@ import Avatar4 from "../assets/Avatar (4).png";
 import Avatar5 from "../assets/Avatar (5).png";
 import create from "../assets/create.png";
 // import search from "../assets/Search.png";
-
+import group from "../assets/Group.png";
+import code from "../assets/Code.png";
+import bell from "../assets/Bell 1.png";
+import forder from "../assets/Folder.png";
+import groups from "../assets/Groups.png";
+import logo from "../assets/Image 1858.png";
+import pie from "../assets/Pie chart.png";
+import chat from "../assets/Chat.png";
+import square from "../assets/Squares four 1.png";
+import question from "../assets/Question 1.png";
 
 
 // Assets
@@ -42,7 +51,7 @@ function Overview() {
 
   return (
     <div className="p-4">
-      
+      <img src={square} alt="" />
       <h2 className="text-xl font-semibold mb-4">Overview</h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {items.map((item) => {
@@ -182,7 +191,8 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-100 font-sans text-sm text-gray-700 grid grid-cols-[250px_1fr]">
       {/* Sidebar */}
       <aside className="bg-white p-4 flex flex-col gap-4 shadow">
-        <div className="text-2xl font-bold mb-6 text-pink-600">Logo</div>
+      <img src={logo} alt="Logo" className="w-22 h-10 object-contain" />
+
         <nav className="flex flex-col gap-3">
           <NavLink
             to="/"
@@ -192,7 +202,7 @@ export default function Dashboard() {
               }`
             }
           >
-            
+            <img src={square} alt="Dashboard Icon" className="w-5 h-5" />
             Dashboard
           </NavLink>
           <NavLink
@@ -203,7 +213,7 @@ export default function Dashboard() {
               }`
             }
           >
-            
+            <img src={forder} alt="Projects Icon" className="w-5 h-5" />
             Projects
           </NavLink>
           <NavLink
@@ -214,7 +224,7 @@ export default function Dashboard() {
               }`
             }
           >
-            
+            <img src={groups} alt="Teams Icon" className="w-5 h-5" />
             Teams
           </NavLink>
           <NavLink
@@ -225,7 +235,7 @@ export default function Dashboard() {
               }`
             }
           >
-            
+            <img src={pie} alt="Analytics Icon" className="w-5 h-5" />
             Analytics
           </NavLink>
           <NavLink
@@ -236,7 +246,7 @@ export default function Dashboard() {
               }`
             }
           >
-            
+            <img src={chat} alt="Messages Icon" className="w-5 h-5" />
             Messages
           </NavLink>
           <NavLink
@@ -247,12 +257,12 @@ export default function Dashboard() {
               }`
             }
           >
-            
+            <img src={code} alt="Integrations Icon" className="w-5 h-5" />
             Integrations
           </NavLink>
         </nav>
         <div className="mt-auto bg-indigo-100 p-3 rounded-xl text-center">
-          <p className="font-semibold mb-2">V2.0 is available</p>
+          <img src={group} alt="Group Icon"  />
           <button className="bg-blue-600 text-white px-3 py-1 rounded-full">
             Try now
           </button>
@@ -265,15 +275,15 @@ export default function Dashboard() {
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-bold text-pink-600">Dashboard</h1>
           <div className="flex gap-4 items-center">
-          <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-5 py-2 rounded-xl shadow-md hover:shadow-lg transition duration-300" onClick={() => setIsAddModalOpen(true)}>
+            <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-5 py-2 rounded-xl shadow-md hover:shadow-lg transition duration-300" 			onClick={() => setIsAddModalOpen(true)}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"/>
           </svg>
           Add User
           </button>
-
             <input type="text" placeholder="Search..." className="border rounded-lg px-3 py-1" />
-            
+            <img src={bell} alt="" className="material-icons text-gray-600"/>
+            <img src={question} alt="" className="material-icons text-gray-600"/>
             
             <img src={Avatar} alt="avatar" className="rounded-full w-8 h-8" />
           </div>
