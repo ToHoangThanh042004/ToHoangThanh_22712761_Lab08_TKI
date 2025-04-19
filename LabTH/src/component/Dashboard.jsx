@@ -182,9 +182,8 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-100 font-sans text-sm text-gray-700 grid grid-cols-[250px_1fr]">
       {/* Sidebar */}
       <aside className="bg-white p-4 flex flex-col gap-4 shadow">
-        <div className="text-2xl font-bold mb-6 text-pink-600">Logo</div>
         <nav className="flex flex-col gap-3">
-          <NavLink
+          <Link
             to="/"
             className={({ isActive }) =>
               `${baseClass} flex items-center gap-3 ${
@@ -194,8 +193,8 @@ export default function Dashboard() {
           >
             
             Dashboard
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/projects"
             className={({ isActive }) =>
               `${baseClass} flex items-center gap-3 ${
@@ -205,8 +204,8 @@ export default function Dashboard() {
           >
             
             Projects
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/teams"
             className={({ isActive }) =>
               `${baseClass} flex items-center gap-3 ${
@@ -216,8 +215,8 @@ export default function Dashboard() {
           >
             
             Teams
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/analytics"
             className={({ isActive }) =>
               `${baseClass} flex items-center gap-3 ${
@@ -227,8 +226,8 @@ export default function Dashboard() {
           >
             
             Analytics
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/messages"
             className={({ isActive }) =>
               `${baseClass} flex items-center gap-3 ${
@@ -238,8 +237,8 @@ export default function Dashboard() {
           >
             
             Messages
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/integrations"
             className={({ isActive }) =>
               `${baseClass} flex items-center gap-3 ${
@@ -249,7 +248,7 @@ export default function Dashboard() {
           >
             
             Integrations
-          </NavLink>
+          </Link>
         </nav>
         <div className="mt-auto bg-indigo-100 p-3 rounded-xl text-center">
           
