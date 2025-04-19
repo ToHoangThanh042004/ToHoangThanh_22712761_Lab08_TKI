@@ -48,7 +48,7 @@
 /* Reset styles */
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   background-color: #f9fafb;
   color: #333;
   height: 100vh;
@@ -58,6 +58,15 @@ body {
   height: 720px; /* Chiều cao cố định */
   margin: 0 auto; /* Căn giữa trang */
   overflow: hidden; /* Ẩn cuộn nếu nội dung vượt quá */
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover {
+  color: #ec4899;
 }
 
 /* Sidebar styles */

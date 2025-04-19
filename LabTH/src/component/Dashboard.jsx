@@ -105,6 +105,9 @@ export default function Dashboard() {
         {/* Placeholder for Main Content */}
         <div className="bg-white rounded-xl shadow p-4">
         <Overview />
+
+        {/* Report Table */}
+        {/* Report Table */}
         <section className="bg-white rounded-xl shadow p-4 overflow-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-pink-600">Detailed report</h2>
@@ -126,37 +129,16 @@ export default function Dashboard() {
                 <th></th>
               </tr>
             </thead>
-            {/* <tbody>
-              {currentItems.map((row, idx) => (
-                <tr key={idx} className="bg-white rounded-xl shadow">
-                  <td><input type="checkbox" /></td>
-                  <td className="flex items-center gap-2 font-medium">
-                    <img src={images[row.avatar]} alt={row.name} className="w-8 h-8 rounded-full" />
-                    {row.name}
-                  </td>
-
-                  <td>{row.company}</td>
-                  <td>{row.value}</td>
-                  <td>{row.date}</td>
-                  <td>
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                      row.status === "New" ? "text-blue-600 bg-blue-100"
-                        : row.status === "In-progress" ? "text-yellow-600 bg-yellow-100"
-                        : "text-green-600 bg-green-100"
-                    }`}>
-                      {row.status}
-                    </span>
-                  </td>
-                  <td>
-                    
-                  </td>
-                </tr>
-              ))}
-            </tbody> */}
+            <tbody>
+              
+            </tbody>
           </table>
 
+          {/* Pagination */}
           
         </section>
+
+
 
           <p className="text-gray-700">Main content goes here...</p>
         </div>
