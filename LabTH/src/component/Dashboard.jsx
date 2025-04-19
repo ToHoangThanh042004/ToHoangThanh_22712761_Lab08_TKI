@@ -6,7 +6,6 @@ import Avatar2 from "../assets/Avatar (2).png";
 import Avatar3 from "../assets/Avatar (3).png";
 import Avatar4 from "../assets/Avatar (4).png";
 import Avatar5 from "../assets/Avatar (5).png";
-import create from "../assets/create.png";
 // Assets
 import ShoppingCart from "../assets/Button 1509.png";
 import DollarSign from "../assets/Button 1529.png";
@@ -74,8 +73,15 @@ export default function Dashboard() {
   const [data, setData] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null); // State để lưu dữ liệu của order được chọn
   const [isModalOpen, setIsModalOpen] = useState(false); // State để điều khiển Modal chỉnh sửa
-  
-  
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // State để điều khiển Modal thêm user
+  const [newUser, setNewUser] = useState({
+    name: "",
+    company: "",
+    value: "",
+    date: "",
+    status: "New",
+    avatar: "Avatar 313.png", // Default avatar
+  });
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
   const [itemsPerPage] = useState(5); // Số lượng item trên mỗi trang
 
@@ -110,22 +116,21 @@ export default function Dashboard() {
     const { name, value } = e.target;
     setSelectedOrder((prevOrder) => ({
       ...prevOrder,
-      [name]: value, 
+      [name]: value, // Cập nhật giá trị của trường được chỉnh sửa
     }));
   };
 
   const handleSave = () => {
     if (selectedOrder) {
       axios
-        .put(`http://localhost:3003/orders/${selectedOrder.id}`, selectedOrder) 
+        .put(`http://localhost:3003/orders/${selectedOrder.id}`, selectedOrder) // Gọi API PUT để cập nhật order
         .then((res) => {
           setData((prevData) =>
             prevData.map((item) =>
               item.id === selectedOrder.id ? res.data : item
             )
           );
-          alert("Chỉnh sửa thành công!!!"); 
-          closeModal(); 
+          closeModal(); // Đóng Modal
         })
         .catch((err) => {
           console.error("Error updating order:", err);
@@ -134,9 +139,35 @@ export default function Dashboard() {
     }
   };
 
-  
+  const handleAddInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
+  };
 
-  
+  const handleAddUser = () => {
+    axios
+      .post("http://localhost:3003/orders", newUser) // Gọi API POST để thêm user
+      .then((res) => {
+        setData((prevData) => [...prevData, res.data]); // Thêm user mới vào danh sách
+        alert("Thêm thành công!"); // Hiển thị thông báo thành công
+        setIsAddModalOpen(false); // Đóng Modal
+        setNewUser({
+          name: "",
+          company: "",
+          value: "",
+          date: "",
+          status: "New",
+          avatar: "Avatar 313.png", // Reset form
+        });
+      })
+      .catch((err) => {
+        console.error("Error adding user:", err);
+        alert("Failed to add user. Please check the API endpoint or server.");
+      });
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-sm text-gray-700 grid grid-cols-[250px_1fr]">
@@ -163,7 +194,25 @@ export default function Dashboard() {
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-bold text-pink-600">Dashboard</h1>
           <div className="flex gap-4 items-center">
-            
+          <button
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold px-5 py-2 rounded-xl shadow-md hover:shadow-lg transition duration-300"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+          <path
+            fillRule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clipRule="evenodd"
+          />
+          </svg>
+            Add User
+          </button>
+
             <input type="text" placeholder="Search..." className="border rounded-lg px-3 py-1" />
             <span className="material-icons text-gray-600">notifications</span>
             <span className="material-icons text-gray-600">help_outline</span>
@@ -218,12 +267,12 @@ export default function Dashboard() {
                     </span>
                   </td>
                   <td>
-                    <img
-                      src={create}
-                      alt="Edit"
-                      className="w-6 h-6 cursor-pointer"
+                    <span
+                      className="material-icons text-gray-400 cursor-pointer"
                       onClick={() => handleEditClick(row)} // Gọi hàm khi nhấn nút "Edit"
-                    />
+                    >
+                      edit
+                    </span>
                   </td>
                 </tr>
               ))}
@@ -349,7 +398,99 @@ export default function Dashboard() {
           </div>
         )}
 
-        
+        {/* Add User Modal */}
+        {isAddModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+              <h2 className="text-lg font-bold mb-4">Add User</h2>
+              <div className="flex flex-col gap-4">
+                <div>
+                  <label className="block text-sm font-medium">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={newUser.name}
+                    onChange={handleAddInputChange}
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Company</label>
+                  <input
+                    type="text"
+                    name="company"
+                    value={newUser.company}
+                    onChange={handleAddInputChange}
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Value</label>
+                  <input
+                    type="text"
+                    name="value"
+                    value={newUser.value}
+                    onChange={handleAddInputChange}
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Date</label>
+                  <input
+                    type="date"
+                    name="date"
+                    value={newUser.date}
+                    onChange={handleAddInputChange}
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Status</label>
+                  <select
+                    name="status"
+                    value={newUser.status}
+                    onChange={handleAddInputChange}
+                    className="w-full border rounded px-3 py-2"
+                  >
+                    <option value="New">New</option>
+                    <option value="In-progress">In-progress</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Avatar</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {Object.keys(images).map((avatar) => (
+                      <img
+                        key={avatar}
+                        src={images[avatar]}
+                        alt={avatar}
+                        className={`w-16 h-16 rounded-full cursor-pointer border-2 ${
+                          newUser.avatar === avatar ? "border-blue-500" : "border-gray-300"
+                        }`}
+                        onClick={() => setNewUser((prevUser) => ({ ...prevUser, avatar }))}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 flex justify-end gap-2">
+                <button
+                  className="bg-gray-300 px-4 py-2 rounded"
+                  onClick={() => setIsAddModalOpen(false)} // Đóng Modal
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  onClick={handleAddUser} // Gọi hàm thêm user
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
