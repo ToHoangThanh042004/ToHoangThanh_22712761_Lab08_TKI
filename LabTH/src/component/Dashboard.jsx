@@ -6,6 +6,7 @@ import Avatar2 from "../assets/Avatar (2).png";
 import Avatar3 from "../assets/Avatar (3).png";
 import Avatar4 from "../assets/Avatar (4).png";
 import Avatar5 from "../assets/Avatar (5).png";
+import create from "../assets/create.png";
 // Assets
 import ShoppingCart from "../assets/Button 1509.png";
 import DollarSign from "../assets/Button 1529.png";
@@ -71,7 +72,9 @@ function Overview() {
 // Main Dashboard
 export default function Dashboard() {
   const [data, setData] = useState([]);
-
+  const [selectedOrder, setSelectedOrder] = useState(null); // State để lưu dữ liệu của order được chọn
+  const [isModalOpen, setIsModalOpen] = useState(false); // State để điều khiển Modal chỉnh sửa
+  
   
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
   const [itemsPerPage] = useState(5); // Số lượng item trên mỗi trang
@@ -93,13 +96,43 @@ export default function Dashboard() {
     setCurrentPage(pageNumber);
   };
 
-  
+  const handleEditClick = (order) => {
+    setSelectedOrder(order); // Lưu dữ liệu của order được chọn
+    setIsModalOpen(true); // Mở Modal
+  };
 
-  
+  const closeModal = () => {
+    setIsModalOpen(false); // Đóng Modal
+    setSelectedOrder(null); // Xóa dữ liệu của order được chọn
+  };
 
-  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedOrder((prevOrder) => ({
+      ...prevOrder,
+      [name]: value, 
+    }));
+  };
 
-  
+  const handleSave = () => {
+    if (selectedOrder) {
+      axios
+        .put(`http://localhost:3003/orders/${selectedOrder.id}`, selectedOrder) 
+        .then((res) => {
+          setData((prevData) =>
+            prevData.map((item) =>
+              item.id === selectedOrder.id ? res.data : item
+            )
+          );
+          alert("Chỉnh sửa thành công!"); 
+          closeModal(); 
+        })
+        .catch((err) => {
+          console.error("Error updating order:", err);
+          alert("Failed to update order. Please check the API endpoint or server.");
+        });
+    }
+  };
 
   
 
@@ -130,12 +163,7 @@ export default function Dashboard() {
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-bold text-pink-600">Dashboard</h1>
           <div className="flex gap-4 items-center">
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-              
-            >
-              Add User
-            </button>
+            
             <input type="text" placeholder="Search..." className="border rounded-lg px-3 py-1" />
             <span className="material-icons text-gray-600">notifications</span>
             <span className="material-icons text-gray-600">help_outline</span>
@@ -190,12 +218,12 @@ export default function Dashboard() {
                     </span>
                   </td>
                   <td>
-                    <span
-                      className="material-icons text-gray-400 cursor-pointer"
-                      
-                    >
-                      edit
-                    </span>
+                    <img
+                      src={create}
+                      alt="Edit"
+                      className="w-6 h-6 cursor-pointer"
+                      onClick={() => handleEditClick(row)} // Gọi hàm khi nhấn nút "Edit"
+                    />
                   </td>
                 </tr>
               ))}
@@ -223,7 +251,103 @@ export default function Dashboard() {
           </div>
         </section>
 
-        
+        {/* Edit User Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+              <h2 className="text-lg font-bold mb-4">Edit Order</h2>
+              {selectedOrder && (
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <label className="block text-sm font-medium">Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={selectedOrder.name}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Company</label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={selectedOrder.company}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Value</label>
+                    <input
+                      type="text"
+                      name="value"
+                      value={selectedOrder.value}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Date</label>
+                    <input
+                      type="date"
+                      name="date"
+                      value={selectedOrder.date}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-3 py-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Status</label>
+                    <select
+                      name="status"
+                      value={selectedOrder.status}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-3 py-2"
+                    >
+                      <option value="New">New</option>
+                      <option value="In-progress">In-progress</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Avatar</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {Object.keys(images).map((avatar) => (
+                        <img
+                          key={avatar}
+                          src={images[avatar]}
+                          alt={avatar}
+                          className={`w-16 h-16 rounded-full cursor-pointer border-2 ${
+                            selectedOrder.avatar === avatar ? "border-blue-500" : "border-gray-300"
+                          }`}
+                          onClick={() =>
+                            setSelectedOrder((prevOrder) => ({ ...prevOrder, avatar }))
+                          }
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className="mt-4 flex justify-end gap-2">
+                <button
+                  className="bg-gray-300 px-4 py-2 rounded"
+                  onClick={closeModal}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  onClick={handleSave} // Gọi hàm handleSave khi nhấn "Save"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         
       </main>
