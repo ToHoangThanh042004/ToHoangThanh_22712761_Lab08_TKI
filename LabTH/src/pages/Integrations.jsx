@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function Integrations() {
   const baseClass = "px-4 py-2 text-left rounded-xl";
@@ -10,54 +10,54 @@ export default function Integrations() {
       <aside className="bg-white p-4 flex flex-col gap-4 shadow">
         <div className="text-2xl font-bold mb-6 text-pink-600">Logo</div>
         <nav className="flex flex-col gap-3">
-          <Link
+          <NavLink
             to="/"
             className={({ isActive }) =>
               `${baseClass} ${isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"}`
             }
           >
             Dashboard
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/projects"
             className={({ isActive }) =>
               `${baseClass} ${isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"}`
             }
           >
             Projects
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/teams"
             className={({ isActive }) =>
               `${baseClass} ${isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"}`
             }
           >
             Teams
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/analytics"
             className={({ isActive }) =>
               `${baseClass} ${isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"}`
             }
           >
             Analytics
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/messages"
             className={({ isActive }) =>
               `${baseClass} ${isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"}`
             }
           >
             Messages
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/integrations"
             className={({ isActive }) =>
               `${baseClass} ${isActive ? "bg-pink-500 text-white" : "hover:text-pink-600"}`
             }
           >
             Integrations
-          </Link>
+          </NavLink>
         </nav>
 
         <div className="mt-auto bg-indigo-100 p-3 rounded-xl text-center">

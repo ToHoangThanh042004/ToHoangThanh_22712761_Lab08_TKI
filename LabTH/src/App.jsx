@@ -7,7 +7,6 @@ import Teams from './pages/Teams';
 import Analytics from './pages/Analytics';
 import Messages from './pages/Messages';
 import Integrations from './pages/Integrations';
-import { NavLink } from 'react-router-dom';
 
 function App() {
   return (
